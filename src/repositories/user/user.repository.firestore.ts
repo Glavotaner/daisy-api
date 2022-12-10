@@ -18,12 +18,7 @@ export class UserRepositoryFirestore extends UserRepository implements UserRepos
     async get({ username }: { username: string }): Promise<User | undefined> {
         const query = await this.users.where('username', '==', username).get();
         const [userDoc] = query.docs;
-        if (userDoc) {
-            const { username, token, pairingCode } = userDoc.data();
-            return { username, token, pairingCode };
-        } else {
-            return undefined;
-        }
+        return userDoc?.data() as User;
     }
 
     update(username: string, properties: Record<string, any>) {
