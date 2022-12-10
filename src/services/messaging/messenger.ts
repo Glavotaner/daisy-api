@@ -5,7 +5,7 @@ export class Messenger {
     private url: string;
     private body: Record<string, any>;
     private headers: () => Record<string, any>;
-    private onUnauthorized: () => any;
+    private onUnauthorized: () => Promise<void>;
     constructor({ url, body, headers, onUnauthorized }: { url: string, body: any, headers: any, onUnauthorized: any }) {
         this.url = url;
         this.body = body;
