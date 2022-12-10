@@ -9,7 +9,7 @@ export class UserRepositoryFirestore extends UserRepository implements UserRepos
     constructor() {
         super();
         const firestore = new Firestore({
-            serviceAccount,
+            credentials: { client_email: serviceAccount.client_email, private_key: serviceAccount.private_key },
             projectId: serviceAccount.project_id,
         });
         this.users = firestore.collection('users');
