@@ -1,6 +1,6 @@
 import { User, UserRepository } from "../../repositories/user/user.repository.js";
 import { MessageData, MessagingService, Notification } from "../messaging/messaging.service.js";
-import { PairResponseData, RegistrationData, RequestPairData, UserService } from "./user.service.js";
+import { PairRequestData, PairResponseData, RegistrationData, RequestPairData, UserService } from "./user.service.js";
 
 export class UserServiceFirestore implements UserService {
     constructor(
@@ -20,7 +20,7 @@ export class UserServiceFirestore implements UserService {
             onFound: async ({ username }) => {
                 const pairingCode = this.getPairingCode();
                 await this.setPairingCode({ pairUsername, pairingCode });
-                await this.sendPairingRequest({ requestingUsername, respondingUsername: username, pairingResponse: pairingCode })
+                await this.sendPairingRequest({ requestingUsername, respondingUsername: username, pairingCode })
             },
             onNotFound: () => { throw new UserDoesNotExistException() },
         });
@@ -30,15 +30,15 @@ export class UserServiceFirestore implements UserService {
         const respondingUser = (await this.userRepository.get({ username: respondingUsername }))!;
         if (pairingResponse === respondingUser.pairingCode) {
             const requestingUser = (await this.userRepository.get({ username: requestingUsername }))!;
-            await this.sendPairingResponse({ respondingUsername: respondingUser.username, requestingUser: requestingUser });
+            await this.sendPairingResponse({ respondingUsername: respondingUser.username, requestingUser });
             await this.setPairingCode({ pairUsername: respondingUser.username, pairingCode: undefined });
         } else {
             throw new PairingFailedException();
         }
     }
 
-    private async sendPairingRequest({ requestingUsername, respondingUsername, pairingResponse }: PairResponseData) {
-        const pairingRequest = { requestingUsername, pairingResponse };
+    private async sendPairingRequest({ requestingUsername, respondingUsername, pairingCode }: PairRequestData) {
+        const pairingRequest = { requestingUsername, pairingCode };
         const notification = {
             title: 'Pairing requested',
             body: `${requestingUsername} wants to pair with you!`,
