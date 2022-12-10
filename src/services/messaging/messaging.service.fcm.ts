@@ -1,6 +1,6 @@
 import { Credentials, JWT } from 'google-auth-library';
 import { UserRepository } from '../../repositories/user/user.repository.js';
-import { Messenger } from '../../utils/classes/messenger.js';
+import { Messenger } from './messenger.js';
 import { Message, MessagingService } from './messaging.service.js';
 import { serviceAccount } from '../../assets/service_account.js';
 
