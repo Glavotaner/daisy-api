@@ -1,3 +1,5 @@
+import fetch, { Response } from "node-fetch";
+
 export class Messenger {
     private attempt = 0;
     private url: string;
