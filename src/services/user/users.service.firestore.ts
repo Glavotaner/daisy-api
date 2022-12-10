@@ -9,21 +9,23 @@ export class UserServiceFirestore implements UserService {
     ) { }
 
     async register({ username, token }: RegistrationData) {
-        return this.userRepository.tryGetUser(username, {
-            onFound: () => { throw new UserRegisteredException() },
-            onNotFound: () => this.userRepository.create({ username, token }),
-        });
+        const user = await this.userRepository.get({ username });
+        if (user != null) {
+            await this.userRepository.create({ username, token });
+        } else {
+            throw new UserRegisteredException();
+        }
     }
 
     async requestPair({ requestingUsername, pairUsername }: RequestPairData) {
-        return this.userRepository.tryGetUser(pairUsername, {
-            onFound: async ({ username }) => {
-                const pairingCode = this.getPairingCode();
-                await this.setPairingCode({ pairUsername, pairingCode });
-                await this.sendPairingRequest({ requestingUsername, respondingUsername: username, pairingCode })
-            },
-            onNotFound: () => { throw new UserDoesNotExistException() },
-        });
+        const user = await this.userRepository.get({ username: pairUsername });
+        if (user != null) {
+            const pairingCode = this.getPairingCode();
+            await this.setPairingCode({ pairUsername, pairingCode });
+            await this.sendPairingRequest({ requestingUsername, respondingUsername: user.username, pairingCode })
+        } else {
+            throw new UserDoesNotExistException();
+        }
     }
 
     async respondPair({ requestingUsername, respondingUsername, pairingResponse }: PairResponseData) {
