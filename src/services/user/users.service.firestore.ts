@@ -16,7 +16,7 @@ export class UserServiceFirestore implements UserService {
 
     async register(registrationData: RegistrationData) {
         const user = await this.userRepository.get({ username: registrationData.username });
-        if (user != null) {
+        if (user == null) {
             await this.userRepository.create(registrationData);
         } else {
             throw new UserRegisteredException();
