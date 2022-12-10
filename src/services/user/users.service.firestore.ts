@@ -8,10 +8,10 @@ export class UserServiceFirestore implements UserService {
         private messagingService: MessagingService,
     ) { }
 
-    async register({ username, token }: RegistrationData) {
-        const user = await this.userRepository.get({ username });
+    async register(registrationData: RegistrationData) {
+        const user = await this.userRepository.get({ username: registrationData.username });
         if (user != null) {
-            await this.userRepository.create({ username, token });
+            await this.userRepository.create(registrationData);
         } else {
             throw new UserRegisteredException();
         }
