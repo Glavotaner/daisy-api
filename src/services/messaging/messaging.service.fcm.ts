@@ -20,7 +20,6 @@ export class MessagingServiceFcm implements MessagingService {
         const { client_email, private_key, project_id } = serviceAccount;
         this.jwt = new JWT({ email: client_email, key: private_key, scopes: this.fcmAccessScope });
         this.url = `https://fcm.googleapis.com/v1/projects/${project_id}/messages:send`;
-        this.userRepository = userRepository;
     }
 
     async send({ message, to }: SendOptions) {
