@@ -31,7 +31,8 @@ export class UserServiceFirestore implements UserService {
         if (pairingResponse === respondingUser.pairingCode) {
             const requestingUser = (await this.userRepository.get({ username: requestingUsername }))!;
             await this.sendPairingResponse({ respondingUsername: respondingUser.username, requestingUser });
-            await this.setPairingCode({ pairUsername: respondingUser.username, pairingCode: undefined });
+            // TODO fix
+            // await this.setPairingCode({ pairUsername: respondingUser.username, pairingCode: undefined });
         } else {
             throw new PairingFailedException();
         }
