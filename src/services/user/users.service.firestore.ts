@@ -3,6 +3,12 @@ import { MessageData, MessagingService, Notification } from "../messaging/messag
 import { PairRequestData, PairResponseData, RegistrationData, RequestPairData, UserService } from "./user.service.js";
 
 export class UserServiceFirestore implements UserService {
+
+    private get randomPairingCode(): string {
+        const randomNumber = Math.random().toString();
+        return randomNumber.slice(2, 8);
+    }
+
     constructor(
         private userRepository: UserRepository,
         private messagingService: MessagingService,
@@ -20,7 +26,7 @@ export class UserServiceFirestore implements UserService {
     async requestPair({ requestingUsername, pairUsername }: RequestPairData) {
         const user = await this.userRepository.get({ username: pairUsername });
         if (user != null) {
-            const pairingCode = this.getPairingCode();
+            const pairingCode = this.randomPairingCode;
             await this.setPairingCode({ pairUsername, pairingCode });
             await this.sendPairingRequest({ requestingUsername, respondingUsername: user.username, pairingCode })
         } else {
@@ -60,11 +66,6 @@ export class UserServiceFirestore implements UserService {
 
     private async sendPairingData({ data, notification, to }: { data: MessageData, notification: Notification, to: string }) {
         await this.messagingService.send({ message: { data, notification }, to });
-    }
-
-    private getPairingCode() {
-        const randomNumber = Math.random().toString();
-        return randomNumber.slice(2, 8);
     }
 
     private setPairingCode({ pairUsername, pairingCode }: { pairUsername: string, pairingCode: string | undefined }) {
