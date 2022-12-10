@@ -4,7 +4,6 @@ export abstract class UserService {
     abstract respondPair(responseData: PairResponseData): Promise<void>;
 }
 
-// TODO make interfaces better
 export interface RegistrationData {
     username: string;
     token: string;
@@ -15,14 +14,15 @@ export interface RequestPairData {
     pairUsername: string;
 }
 
-export interface PairResponseData {
-    requestingUsername: string;
-    respondingUsername: string;
+export interface PairResponseData extends PairingMessagingData {
     pairingResponse: string;
 }
 
-export interface PairRequestData {
+export interface PairRequestData extends PairingMessagingData {
+    pairingCode: string;
+}
+
+export interface PairingMessagingData {
     requestingUsername: string;
     respondingUsername: string;
-    pairingCode: string;
 }
