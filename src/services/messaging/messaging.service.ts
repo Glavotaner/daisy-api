@@ -1,5 +1,10 @@
 export abstract class MessagingService {
-    abstract send(options: { message: Message, to: string }): Promise<void>;
+    abstract send(options: SendOptions): Promise<void>;
+}
+
+export interface SendOptions {
+    message: Message;
+    to: string;
 }
 
 export interface Message {

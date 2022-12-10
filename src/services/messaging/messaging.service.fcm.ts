@@ -1,7 +1,7 @@
 import { Credentials, JWT } from 'google-auth-library';
 import { UserRepository } from '../../repositories/user/user.repository.js';
 import { Messenger } from './messenger.js';
-import { Message, MessagingService } from './messaging.service.js';
+import { MessagingService, SendOptions } from './messaging.service.js';
 import { serviceAccount } from '../../assets/service_account.js';
 
 export class MessagingServiceFcm implements MessagingService {
@@ -23,7 +23,7 @@ export class MessagingServiceFcm implements MessagingService {
         this.userRepository = userRepository;
     }
 
-    async send({ message, to }: { message: Message, to: string }) {
+    async send({ message, to }: SendOptions) {
         const recipient = await this.userRepository.get({ username: to });
         if (!recipient) {
             throw new RecipientNotFoundException();
