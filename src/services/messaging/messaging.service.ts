@@ -21,7 +21,7 @@ export interface Notification {
 }
 
 export interface AndroidOptions {
-    notifications?: {
+    notification?: {
         channel_id?: string;
     }
 }

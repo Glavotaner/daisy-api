@@ -31,7 +31,7 @@ export class MessagingServiceFcm implements MessagingService {
         }
         message.token = recipient.token;
         if (message.channel) {
-            message.android = { notifications: { channel_id: message.channel } };
+            message.android = { notification: { channel_id: message.channel } };
             delete message.channel;
         }
         const options = { url: this.url, body: { message }, headers: () => this.messageHeaders };
