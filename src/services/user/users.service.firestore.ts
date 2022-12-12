@@ -65,7 +65,10 @@ export class UserServiceFirestore implements UserService {
     }
 
     private async sendPairingData({ data, notification, to }: { data: MessageData, notification: Notification, to: string }) {
-        await this.messagingService.send({ message: { data, notification }, to });
+        await this.messagingService.send({
+            message: { data, notification, channel: 'pairing' },
+            to
+        });
     }
 
     private setPairingCode({ pairUsername, pairingCode }: { pairUsername: string, pairingCode: string | undefined }) {

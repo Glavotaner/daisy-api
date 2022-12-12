@@ -11,11 +11,19 @@ export interface Message {
     notification?: Notification,
     data?: MessageData;
     token?: string;
+    channel?: string;
+    android?: AndroidOptions;
 }
 
 export interface Notification {
     title?: string;
     body?: string;
+}
+
+export interface AndroidOptions {
+    notifications?: {
+        channel_id?: string;
+    }
 }
 
 export type MessageData = Record<string, any>;
