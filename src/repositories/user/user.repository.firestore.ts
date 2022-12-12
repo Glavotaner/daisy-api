@@ -2,12 +2,11 @@ import { CollectionReference, Firestore } from "@google-cloud/firestore";
 import { User, UserRepository } from "./user.repository.js";
 import { serviceAccount } from '../../assets/service_account.js';
 
-export class UserRepositoryFirestore extends UserRepository implements UserRepository {
+export class UserRepositoryFirestore implements UserRepository {
 
     private users: CollectionReference;
 
     constructor() {
-        super();
         const firestore = new Firestore({
             credentials: { client_email: serviceAccount.client_email, private_key: serviceAccount.private_key },
             projectId: serviceAccount.project_id,
