@@ -48,11 +48,7 @@ export class UserServiceFirestore implements UserService {
 
     private async sendPairingRequest({ requestingUsername, respondingUsername, pairingCode }: PairRequestData) {
         const pairingRequest = { requestingUsername, pairingCode };
-        const notification = {
-            title: 'Pairing requested',
-            body: `${requestingUsername} wants to pair with you!`,
-        };
-        await this.sendPairingData({ data: pairingRequest, notification, to: respondingUsername })
+        await this.sendPairingData({ data: pairingRequest, to: respondingUsername })
     }
 
     private async sendPairingResponse({ respondingUsername, requestingUser }: { respondingUsername: string, requestingUser: User }) {
@@ -64,7 +60,7 @@ export class UserServiceFirestore implements UserService {
         await this.sendPairingData({ data: pairingResponse, notification, to: respondingUsername });
     }
 
-    private async sendPairingData({ data, notification, to }: { data: MessageData, notification: Notification, to: string }) {
+    private async sendPairingData({ data, notification, to }: { data: MessageData, notification?: Notification, to: string }) {
         await this.messagingService.send({
             message: { data, notification, channel: 'pairing' },
             to
