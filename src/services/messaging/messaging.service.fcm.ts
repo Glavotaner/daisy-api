@@ -30,10 +30,10 @@ export class MessagingServiceFcm implements MessagingService {
             throw new RecipientTokenNotFoundException();
         }
         message.token = recipient.token;
-        if (message.channel) {
-            message.android = { notification: { channel_id: message.channel } };
-            delete message.channel;
-        }
+        // if (message.channel) {
+        //     message.android = { notification: { channel_id: message.channel } };
+        //     delete message.channel;
+        // }
         const options = { url: this.url, body: { message }, headers: () => this.messageHeaders };
         const request = new Messenger({ ...options, onUnauthorized: () => this.refreshAccessToken() });
         return request.send();
