@@ -30,10 +30,11 @@ export class MessagingServiceFcm implements MessagingService {
             throw new RecipientTokenNotFoundException();
         }
         message.token = recipient.token;
-        // if (message.channel) {
-        //     message.android = { notification: { channel_id: message.channel } };
-        //     delete message.channel;
-        // }
+        if (message.channel) {
+            // TODO data messages are shown as notifications because they contain a notification payload
+            // message.android = { notification: { channel_id: message.channel } };
+            delete message.channel;
+        }
         const options = { url: this.url, body: { message }, headers: () => this.messageHeaders };
         const request = new Messenger({ ...options, onUnauthorized: () => this.refreshAccessToken() });
         return request.send();
@@ -77,16 +78,13 @@ class Messenger {
             body,
             headers: this.headers(),
         });
+        const badRequest = 400;
+        const unauthorized = 401;
+        const serverError = 500;
         switch (response.status) {
-            case 400: {
-                return this.handleError(response)
-            };
-            case 401: {
-                return this.handleUnauthorized()
-            };
-            case 500: {
-                return this.handleServerError(response)
-            };
+            case badRequest: return this.handleError(response)
+            case unauthorized: return this.handleUnauthorized()
+            case serverError: return this.handleServerError(response)
         }
     }
 
