@@ -14,7 +14,7 @@ export class App {
     ) {
         this.initializeUser();
         this.initializeMessaging();
-        this.app.use("/api", this.api);
+        this.app.use(this.api);
     }
 
     initializeUser() {
