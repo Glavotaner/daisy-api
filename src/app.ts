@@ -4,7 +4,7 @@ import { MessagingService } from './services/messaging/messaging.service.js';
 import { UserService } from './services/user/user.service.js';
 
 export class App {
-    private app = express();
+    app = express();
     private api = express.Router();
     private user = express.Router();
     private messaging = express.Router();
@@ -17,10 +17,6 @@ export class App {
         this.app.use("/api", this.api);
     }
 
-    start() {
-        this.app.listen(3000, () => console.log("started"));
-    }
-
     initializeUser() {
         this.user.use(express.json());
         this.setupController('user', this.user, () => {
@@ -30,7 +26,7 @@ export class App {
                 } catch (exception) {
                     return res.status(400).send(getErrorMessage(exception));
                 }
-                res.status(200).send();
+                return res.status(200).send();
             });
             this.user.post("/requestPair", async ({ body }, res) => {
                 try {
@@ -38,7 +34,7 @@ export class App {
                 } catch (exception) {
                     return res.status(400).send(getErrorMessage(exception));
                 }
-                res.status(200).send();
+                return res.status(200).send();
             });
             this.user.post("/respondPair", async ({ body }, res) => {
                 try {
@@ -46,7 +42,7 @@ export class App {
                 } catch (exception) {
                     return res.status(400).send(getErrorMessage(exception));
                 }
-                res.status(200).send();
+                return res.status(200).send();
             });
         });
     }
